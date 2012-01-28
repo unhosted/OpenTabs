@@ -55,21 +55,8 @@
             <h5 id="welcome">Loading...</h5>
         </div>
         <div class="one-third column">
-            <hr />
-
-          <ul class="tabs">
-            <!-- Give href an ID value of corresponding "tabs-content" <li>'s -->
-            <li><a class="active" href="#simple">My Tabs</a></li>
-
-            <li><a href="#advanced">Advanced</a></li>
-          </ul>
-
-          <ul class="tabs-content">
-            <li id="simple" class="active">
-
-              <form>
-                  Send a new IOU to:
-                  <br/>
+            <form>
+                  Send IOU to:
                   <select name="payee" id="payee">
                       <option value="testdummy@opentabs.net">Test Dummy</option>
                   </select>&nbsp;<a href="javascript:document.IOU.addR()"><img src="http://www.blue-xplosion.de/img/icon_add.png" /></a>
@@ -91,18 +78,13 @@
               </form>
 
               <div id="opentabs"></div>
-              <br/>
+
               <div class="plus" id="status"></div>
               <div class="note">Note: All test data will be deleted 31 Jan 2012</div>
 
-            <li id="advanced">
-                            Advanced Options coming soon...
-              <span class="heading hide">
-              <a href="javascript:document.IOU.loginPopup()">Login</a></span>
-              <br/><br/>
+              <span class="heading hide"><a href="javascript:document.IOU.loginPopup()">Login</a></span>
 
               <button class="hide" id="clearall">Clear All IOUs</button>
-
 
               <form id="loginPopup" class="hide" action="https://data.fm/rp_auth">
                 &nbsp;WebID <a href="https://data.fm/login?next=http://opentabs.data.fm/"><img height="60" width="105" style="float: left" src="http://www.w3.org/wiki/images/0/03/Foaf%2Bssl%24foaf_keylock_small.png" /></a><br/>
@@ -111,7 +93,6 @@
               <a href="https://data.fm/login?provider=Yahoo&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/yahoo.png" /></a><br/>
               </form>
 
-              <br/>
               <span class="heading hide"><a href="javascript:document.IOU.addR()">Add New Recipient</a></span><br/>
               <form id="addRecipient" class="hide">
                   Name : <br/><input type="text" size="20" id="name" name="name" value="" /><br/>
@@ -119,19 +100,11 @@
                   <input type="button" value="Add" id="add" />
               </form>
 
-              <br/>
-              <br/>
-
-              <a href="https://github.com/melvincarvalho/OpenTabs" rel="doap:homepage">Source code</a>
-
-
-            </li>
-          </ul>
+              <a href="https://github.com/unhosted/Opentabs" rel="doap:homepage">Source code</a>
 
         </div>
     </div>
 
-    <script src="javascripts/tabs.js"></script>
     <script src="javascripts/sha1.js"></script>
     <script src="javascripts/jsonld.js"></script>
     <script src="javascripts/jsonld-turtle.js"></script>
