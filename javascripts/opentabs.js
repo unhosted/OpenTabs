@@ -339,7 +339,7 @@
       }
 
       var line = '<tr><thead>'
-        line += '<td class="heading">My Tabs</td>';
+        line += '<td class="heading">Tabs</td>';
         line += '<td class="heading">Amount</td>';
         line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
         line += '</thead></tr>';
@@ -382,7 +382,7 @@
       var ledger = {};
 
       var line = '<tr><thead>'
-        line += '<td class="heading">My Tabs</td>';
+        line += '<td class="heading">Tabs</td>';
         line += '<td class="heading">Amount</td>';
         line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
         line += '</thead></tr>';

@@ -46,17 +46,17 @@
         <div class="sixteen columns">
             <h1 class="remove-bottom" style="margin-top: 40px">Opentabs <span class="alpha">Alpha</span></h1>
 
-            <h5 id="welcome">Loading...</h5>
+            <h5 id="welcome">Loading &hellip;</h5>
         </div>
+        <hr />
         <div class="one-third column">
             <form>
-                  Send IOU to:
+				<p>Send IOU to:
                   <select name="payee" id="payee">
                       <option value="testdummy@opentabs.net">Test Dummy</option>
-                  </select>&nbsp;<a href="javascript:document.IOU.addR()"><img src="http://www.blue-xplosion.de/img/icon_add.png" /></a>
-                  <br/>
-                  Amount:
-                  <br/>
+                  </select> <a href="javascript:document.IOU.addR()">add</a>
+                </p>
+                <p>Amount:
                   <select name="amount" id="quantity">
                       <option value="1">1</option>
                       <option value="5" selected>5</option>
@@ -69,6 +69,7 @@
                       <option value="EUR">&euro;</option>
                   </select>
                   <input type="button" value="Send" id="save" />
+                </p>
               </form>
 
               <div id="opentabs"></div>
@@ -89,13 +90,10 @@
 
               <span class="heading hide"><a href="javascript:document.IOU.addR()">Add New Recipient</a></span><br/>
               <form id="addRecipient" class="hide">
-                  Name : <br/><input type="text" size="20" id="name" name="name" value="" /><br/>
-                  Web Address : <br/><input size="20" type="text" id="uri" name="uri" value="" /><br/>
+                  <label for="name">Name <input type="text" size="20" id="name" name="name" value="" /></label>
+                  <label for="uri">Email address <input size="20" type="text" id="uri" name="uri" value="" /></label>
                   <input type="button" value="Add" id="add" />
               </form>
-
-              <a href="https://github.com/unhosted/Opentabs" rel="doap:homepage">Source code</a>
-
         </div>
     </div>
 
