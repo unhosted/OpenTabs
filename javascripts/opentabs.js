@@ -91,6 +91,7 @@
 
       this.addFriend( uri , name );
       this.saveRemote();
+      $('#addRecipient').hide();
 
       alert( name + ' added!' );
       this.render();
@@ -681,7 +682,7 @@
     },
 
     addR: function(id) {
-      $('#addRecipient').dialog();
+      $('#addRecipient').show();
     },
 
     loginPopup: function(id) {
@@ -697,6 +698,7 @@
     $('#clearall').click(function() { document.IOU.clear() });
     $('#save').click(function() { document.IOU.save() });
     $('#add').click(function() { document.IOU.addRecipient() });
+    $("label").inFieldLabels();
   });
 
 })(jQuery);

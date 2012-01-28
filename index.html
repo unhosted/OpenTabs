@@ -55,6 +55,11 @@
                   <select name="payee" id="payee">
                       <option value="testdummy@opentabs.net">Test Dummy</option>
                   </select> <a href="javascript:document.IOU.addR()">add</a>
+                  <div id="addRecipient" style="display:none;">
+                  	<span class="infieldlabel"><label for="name">Name</label><input type="text" size="10" id="name" name="name" value="" /></span>
+                  	<span class="infieldlabel"><label for="uri">Email address</label><input size="10" type="text" id="uri" name="uri" value="" /></span>
+                  	<input type="button" value="Add" id="add" />
+                  </div>
                 </p>
                 <p>Amount:
                   <select name="amount" id="quantity">
@@ -88,12 +93,6 @@
               <a href="https://data.fm/login?provider=Yahoo&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/yahoo.png" /></a><br/>
               </form>
 
-              <span class="heading hide"><a href="javascript:document.IOU.addR()">Add New Recipient</a></span><br/>
-              <form id="addRecipient" class="hide">
-                  <label for="name">Name <input type="text" size="20" id="name" name="name" value="" /></label>
-                  <label for="uri">Email address <input size="20" type="text" id="uri" name="uri" value="" /></label>
-                  <input type="button" value="Add" id="add" />
-              </form>
         </div>
     </div>
 
@@ -101,5 +100,6 @@
     <script src="javascripts/jsonld.js"></script>
     <script src="javascripts/jsonld-turtle.js"></script>
     <script src="javascripts/opentabs.js"></script>
+    <script src="javascripts/jquery-infieldlabel.min.js"></script>
     </body>
 </html>
