@@ -33,107 +33,13 @@
     <link rel="stylesheet" href="stylesheets/base.css">
     <link rel="stylesheet" href="stylesheets/skeleton.css">
     <link rel="stylesheet" href="stylesheets/layout.css">
-
+    <link rel="stylesheet" href="stylesheets/style.css">
     <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/base/jquery-ui.css">
-
 
     <link rel="shortcut icon" href="images/favicon.ico">
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
-
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
-
-    <style>
-    .gold    { background-color: #FFFF99; text-align: middle; width: 25px;}
-    .blue    { background-color: #EEEEFF }
-    .plus    { color: rgb(23, 136, 23) ; font-weight:bold; }
-    .minus   { color: rgb(205, 23, 28) ; font-weight:bold; }
-    .heading { font-weight:bold; }
-    .hide    { display: none; }
-    .note    { color: green; font-size: small; }
-    .alpha   { vertical-align: super; font-size: small; color: grey; }
-
-    table {
-        *border-collapse: collapse; /* IE7 and lower */
-        border-spacing: 0;
-        width: 100%;    
-    }
-
-    .bordered {
-        border: solid #ccc 1px;
-        -moz-border-radius: 6px;
-        -webkit-border-radius: 6px;
-        border-radius: 6px;
-        -webkit-box-shadow: 0 1px 1px #ccc; 
-        -moz-box-shadow: 0 1px 1px #ccc; 
-        box-shadow: 0 1px 1px #ccc;         
-    }
-
-    .bordered tr:hover {
-        background: #fbf8e9;
-        -o-transition: all 0.1s ease-in-out;
-        -webkit-transition: all 0.1s ease-in-out;
-        -moz-transition: all 0.1s ease-in-out;
-        -ms-transition: all 0.1s ease-in-out;
-        transition: all 0.1s ease-in-out;     
-    }    
-        
-    .bordered td, .bordered th {
-        border-left: 1px solid #ccc;
-        border-top: 1px solid #ccc;
-        padding: 10px;
-        text-align: left;    
-    }
-
-    .bordered th {
-        background-color: #dce9f9;
-        background-image: -webkit-gradient(linear, left top, left bottom, from(#ebf3fc), to(#dce9f9));
-        background-image: -webkit-linear-gradient(top, #ebf3fc, #dce9f9);
-        background-image:    -moz-linear-gradient(top, #ebf3fc, #dce9f9);
-        background-image:     -ms-linear-gradient(top, #ebf3fc, #dce9f9);
-        background-image:      -o-linear-gradient(top, #ebf3fc, #dce9f9);
-        background-image:         linear-gradient(top, #ebf3fc, #dce9f9);
-        -webkit-box-shadow: 0 1px 0 rgba(255,255,255,.8) inset; 
-        -moz-box-shadow:0 1px 0 rgba(255,255,255,.8) inset;  
-        box-shadow: 0 1px 0 rgba(255,255,255,.8) inset;        
-        border-top: none;
-        text-shadow: 0 1px 0 rgba(255,255,255,.5); 
-    }
-
-    .bordered td:first-child, .bordered th:first-child {
-        border-left: none;
-    }
-
-    .bordered th:first-child {
-        -moz-border-radius: 6px 0 0 0;
-        -webkit-border-radius: 6px 0 0 0;
-        border-radius: 6px 0 0 0;
-    }
-
-    .bordered th:last-child {
-        -moz-border-radius: 0 6px 0 0;
-        -webkit-border-radius: 0 6px 0 0;
-        border-radius: 0 6px 0 0;
-    }
-
-    .bordered th:only-child{
-        -moz-border-radius: 6px 6px 0 0;
-        -webkit-border-radius: 6px 6px 0 0;
-        border-radius: 6px 6px 0 0;
-    }
-
-    .bordered tr:last-child td:first-child {
-        -moz-border-radius: 0 0 0 6px;
-        -webkit-border-radius: 0 0 0 6px;
-        border-radius: 0 0 0 6px;
-    }
-
-    .bordered tr:last-child td:last-child {
-        -moz-border-radius: 0 0 6px 0;
-        -webkit-border-radius: 0 0 6px 0;
-        border-radius: 0 0 6px 0;
-    }
-</style>
 
 </head>
 <body>
@@ -158,7 +64,7 @@
             <li><a href="#advanced">Advanced</a></li>
           </ul>
 
-          <ul class="tabs-content">     
+          <ul class="tabs-content">
             <li id="simple" class="active">
 
               <form>
@@ -167,7 +73,7 @@
                   <select name="payee" id="payee">
                       <option value="testdummy@opentabs.net">Test Dummy</option>
                   </select>&nbsp;<a href="javascript:document.IOU.addR()"><img src="http://www.blue-xplosion.de/img/icon_add.png" /></a>
-                  <br/>      
+                  <br/>
                   Amount:
                   <br/>
                   <select name="amount" id="quantity">
@@ -177,13 +83,13 @@
                       <option value="100">100</option>
                       <option value="250">250</option>
                       <option value="1000">1000</option>
-                  </select>              
+                  </select>
                   <select name="currency" id="currency">
                       <option value="EUR">&euro;</option>
-                  </select>              
+                  </select>
                   <input type="button" value="Send" id="save" />
               </form>
-              
+
               <div id="opentabs"></div>
               <br/>
               <div class="plus" id="status"></div>
@@ -196,15 +102,15 @@
               <br/><br/>
 
               <button class="hide" id="clearall">Clear All IOUs</button>
-              
-              
+
+
               <form id="loginPopup" class="hide" action="https://data.fm/rp_auth">
                 &nbsp;WebID <a href="https://data.fm/login?next=http://opentabs.data.fm/"><img height="60" width="105" style="float: left" src="http://www.w3.org/wiki/images/0/03/Foaf%2Bssl%24foaf_keylock_small.png" /></a><br/>
               <br/><br/><a href="javascript:document.IOU.FBLogin()"><img src="http://www.ikerjimenez.com/imagenes/logo-facebook.gif" /></a><br/>
               <a href="https://data.fm/login?provider=Gmail&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/gmail.png" /></a><br/>
               <a href="https://data.fm/login?provider=Yahoo&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/yahoo.png" /></a><br/>
               </form>
-              
+
               <br/>
               <span class="heading hide"><a href="javascript:document.IOU.addR()">Add New Recipient</a></span><br/>
               <form id="addRecipient" class="hide">
@@ -212,27 +118,20 @@
                   Web Address : <br/><input size="20" type="text" id="uri" name="uri" value="" /><br/>
                   <input type="button" value="Add" id="add" />
               </form>
-              
+
               <br/>
               <br/>
 
               <a href="https://github.com/melvincarvalho/OpenTabs" rel="doap:homepage">Source code</a>
-              
-              
+
+
             </li>
           </ul>
 
         </div>
 
     </div>
-    
 
-
-
-
-
-
-    
 
 <script src="javascripts/tabs.js"></script>
 <script src="javascripts/sha1.js"></script>
@@ -242,10 +141,10 @@
 <script>
 
 (function($) {
-  
+
   var IOU = function() { this.load() };
   IOU.prototype = {
-    
+
     user: null,
     IOUs: {},
     friends: [],
@@ -253,23 +152,23 @@
     userProfileURI: 'https://data.fm/user.js',
     walletURI: null,
     friendsURI: null,
-  
+
     // Starting point
     load: function() {
       this.status('Loading user...', true);
       this.getuserProfile();
       this.render();
     },
-    
+
     // Load user details, callback to displayUser
     getuserProfile: function() {
       this.userProfileURI = this.getUserProfileURI('document.IOU.displayUser');
-      
+
       var script = document.createElement('script');
       script.src = this.userProfileURI;
       document.body.appendChild(script);
     },
-    
+
     getUserProfileURI: function(callback) {
       // Non Facebook
       if (window.location.hash.length == 0) {
@@ -279,7 +178,7 @@
         return "https://graph.facebook.com/me?" + window.location.hash.substring(1) + '&callback=' + callback;
       }
     },
-    
+
     // callback to loadFriends, calls loadRemote
     displayUser: function(user) {
       this.status('Loading user...', false);
@@ -290,7 +189,7 @@
         userName.innerHTML = 'Greetings, ' + user.name;
         this.loadFBFriends();
       } else {
-        this.user = user; 
+        this.user = user;
         var userName = document.getElementById('welcome');
         if (user.substring(0,4) == 'dns:' ) {
           userName.innerHTML = 'IP: ' + this.user + '&nbsp;' + '<a href="javascript:document.IOU.loginPopup()"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
@@ -300,7 +199,7 @@
       }
       this.loadRemote();
     },
-    
+
     // callback to displayFriends
     loadFBFriends: function() {
       this.status('Loading friends...', true);
@@ -313,8 +212,8 @@
       // use jsonp to call the graph
       var script = document.createElement('script');
       script.src = url;
-      document.body.appendChild(script);        
-    },    
+      document.body.appendChild(script);
+    },
 
     displayFBFriends: function(data) {
       this.status('Loading friends...', false);
@@ -331,10 +230,10 @@
     addRecipient: function() {
       var uri  = this.makeURI($('#uri').val());
       var name = $('#name').val();
-      
+
       this.addFriend( uri , name );
       this.saveRemote();
-      
+
       alert( name + ' added!' );
       this.render();
     },
@@ -356,17 +255,17 @@
 
     loadRemote: function() {
       this.loadRemoteIOUs();
-      this.loadRemoteFriends();      
+      this.loadRemoteFriends();
     },
-    
+
     loadRemoteFriends: function() {
       this.status('Loading friends...', true);
-      
+
       // get user
       var user = this.user;
       if (!user) return;
       var userSha1 = hex_sha1(user);
-      
+
       that = this;
 
       $.getJSON(this.   getFriendsURI(user) , function(data){
@@ -377,7 +276,7 @@
             document.IOU.addFriend(uri, name);
           }
         }
-        
+
         that.render();
         that.status('Loading friends...', false);
       }).error(function(data){
@@ -385,19 +284,19 @@
         that.render();
         that.status('Loading friends...', false);
       });
-            
+
     },
-    
+
     getFriendsURI: function(user) {
       // data fm friends
       var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
       return baseDir + 'private/friends';
     },
-    
+
     loadRemoteIOUs: function() {
-      this.status('Loading IOUs...', true);      
+      this.status('Loading IOUs...', true);
       that = this;
-      
+
       $.getJSON(this.getWalletURI(this.user) , function(data){
         /*
         document.IOU.IOUs = [];
@@ -419,27 +318,27 @@
       }).error(function(data){
         that.status('Loading IOUs...', false);
       });
-            
+
     },
-    
+
     getWalletURI: function(user) {
       // data fm wallet
       var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
       return baseDir + 'private/transfers';
     },
-    
+
     save: function() {
       if( !this.confirm() ) {
         alert('Operation Cancelled');
         return;
       }
-      
+
       this.saveLocal();
       this.saveRemote();
       this.syncRemote();
     },
 
-    saveLocal: function() { 
+    saveLocal: function() {
       this.status('Saving IOUs...', true);
       if (!this.IOUs) this.IOUs = [];
       var newIOU = this.createIOU(this.user, this.makeURI($('#payee').val()), $('#quantity').val(), $('#currency').val(), 'test', new Date() );
@@ -451,7 +350,7 @@
       this.saveRemoteIOUs();
       this.saveRemoteFriends();
     },
-    
+
     saveRemoteIOUs: function() {
       // get user
       var user = this.user;
@@ -465,15 +364,15 @@
 
 
       // DELETE
-      this.deleteFile(this.getWalletURI(user));      
+      this.deleteFile(this.getWalletURI(user));
 
       // PUT
       //var body = jsonld.turtle(this.IOUs);
       var body = JSON.stringify(this.IOUs);
-      this.postFile(this.getWalletURI(user), body);      
+      this.postFile(this.getWalletURI(user), body);
       this.status('Saving IOUs...', false);
     },
-    
+
     saveRemoteFriends: function() {
       this.status('Saving friends...', true);
       // get user
@@ -488,16 +387,16 @@
 
 
       // DELETE
-      this.deleteFile(this.getFriendsURI(user));      
+      this.deleteFile(this.getFriendsURI(user));
 
       // PUT
       var body = jsonld.turtle(this.friends);
-      this.postFile(this.getFriendsURI(user));      
+      this.postFile(this.getFriendsURI(user));
       this.status('Saving friends...', false);
     },
-    
-    
-    
+
+
+
     syncRemote: function() {
       this.status('Saving IOUs...', true);
       // get user
@@ -530,64 +429,64 @@
             }
           }
           */
-          
+
           var IOUs = data;
-          
+
           IOUs = that.mergeObjects(IOUs, that.createIOU($('#payee').val(), that.user, -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date()));
 
           // DELETE
           that.deleteFile(baseDir + 'private/transfers');
-      
+
           // PUT
           //var body = jsonld.turtle(IOUs);
           var body = JSON.stringify(IOUs);
           that.postFile(baseDir + 'private/transfers', body);
-        
-        
+
+
           that.render();
           that.status('Saving IOUs...', false);
-       
+
         }).error(function () {
-          var IOUs = [];        
+          var IOUs = [];
           IOUs.push(that.createIOU($('#payee').val(), that.user, -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date() ));
-        
+
           // PUT
           var body = jsonld.turtle(IOUs);
           that.putFile(baseDir + 'private/transfers', body);
-          
+
           that.status('Saving IOUs...', false);
           that.render();
-          
+
         });
       } catch (err) {
         alert('could not sync');
       }
-      
+
     },
-    
-    
+
+
 
     // render
     render: function() {
       that = this;
       this.populateFriendsDropdown();
-      
-      
+
+
       $('#opentabs').empty();
-      
+
       /*
       if(!this.IOUs || !this.IOUs.length) {
         $('#opentabs').append( $('<p>').text('Currently no open tabs found.') );
         return;
       }
-      
-      var line = '<tr><thead>' 
+
+      var line = '<tr><thead>'
         line += '<td class="heading">My Tabs</td>';
         line += '<td class="heading">Amount</td>';
         line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
         line += '</thead></tr>';
       $('#opentabs').append( $('<table class="bordered">').append(line) );
-      
+
       this.IOUs.forEach(function(item) {
         if (item) {
           var source = item['http://purl.org/commerce#source']['@id'];
@@ -596,9 +495,9 @@
           var curr = item['http://purl.org/commerce#currency'];
           var created = item['http://purl.org/dc/terms/created'];
           var comment = item['http://www.w3.org/2000/01/rdf-schema#comment'];
-          var line = '<tr>' 
+          var line = '<tr>'
           var pm = ((-1 * amount)<0)?'minus':'plus';
-          
+
           line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
           line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
           line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
@@ -616,21 +515,21 @@
           }
         }
       });
-      
-      
-      this.beautify();      
+
+
+      this.beautify();
       this.showSummary();
       */
-      
+
       var ledger = {};
-      
-      var line = '<tr><thead>' 
+
+      var line = '<tr><thead>'
         line += '<td class="heading">My Tabs</td>';
         line += '<td class="heading">Amount</td>';
         line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
         line += '</thead></tr>';
       $('#opentabs').append( $('<table class="bordered">').append(line) );
-      
+
 
       for(var id in this.IOUs) {
         if(this.IOUs.hasOwnProperty(id)) {
@@ -640,17 +539,17 @@
           if (!kv["http://purl.org/commerce#destination"]) continue;
           if (!kv["http://purl.org/commerce#source"]) continue;
           if (!kv["http://purl.org/dc/terms/created"]) continue;
-          
+
           var amount = kv["http://purl.org/commerce#amount"][0]['value'];
           var curr = kv["http://purl.org/commerce#currency"][0]['value'];
           var dest = kv["http://purl.org/commerce#destination"][0]['value'];
           var source = kv["http://purl.org/commerce#source"][0]['value'];
           var created = kv["http://purl.org/dc/terms/created"][0]['value'];
           var comment = kv['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
-          
-          var line = '<tr>' 
+
+          var line = '<tr>'
           var pm = ((-1 * amount)<0)?'minus':'plus';
-          
+
           line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
           line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
           line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
@@ -666,23 +565,23 @@
             $('#opentabs table tr:last').after(line);
             $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
           }
-          
+
         }
       }
-      
-      this.beautify();      
+
+      this.beautify();
       this.showSummary();
-      
+
       //$('#opentabs').append(that.renderRawParagraph(that.IOUs));
     },
 
     renderRaw: function(data) {
       return JSON.stringify(data);
     },
-    
+
     renderRawParagraph: function(data) {
-      var ret = '';   
-    
+      var ret = '';
+
       for(var id in data) {
         if(data.hasOwnProperty(id)) {
           var kv = data[id];
@@ -700,9 +599,9 @@
       }
       return ret;
     },
-    
 
-    
+
+
     showSummary: function() {
       $('#advanced').removeClass('active');
       $('#simple').addClass('active');
@@ -710,25 +609,25 @@
       $('#advanced').hide();
       $('#simple').show();
     },
-    
+
     populateFriendsDropdown: function() {
       // sort friends
       if (!this.friends) return;
-      this.friends = this.friends.sort(function(a,b) { 
-        if (a['http://xmlns.com/foaf/0.1/name'] > b['http://xmlns.com/foaf/0.1/name']) { 
+      this.friends = this.friends.sort(function(a,b) {
+        if (a['http://xmlns.com/foaf/0.1/name'] > b['http://xmlns.com/foaf/0.1/name']) {
           return 1;
-        } else { 
-          return -1; 
+        } else {
+          return -1;
         }
       });
       $('#payee').children().remove().end();
-      
+
       for (i=0; i<this.friends.length; i++) {
         var uri  = this.friends[i]['@id'];
         var name = this.friends[i]['http://xmlns.com/foaf/0.1/name'];
         $("#payee").append("<option value="+ uri +">"+ name +"</option>");
       }
-    },      
+    },
 
     // Helpers
     confirm: function() {
@@ -747,17 +646,17 @@
       //alert('changing cells');
       if ( !this.friends ) this.friends = [];
       that = this;
-      $('td').each(function() { 
+      $('td').each(function() {
         var html = $(this).html();
         var n;
         //alert(JSON.stringify(that.friends));
         for (i=0; i<that.friends.length; i++) {
           if ( that.friends[i]['@id'] == html) {
             n = that.friends[i]['http://xmlns.com/foaf/0.1/name'];
-            //alert(n);   
+            //alert(n);
           }
         }
-          
+
         if ( n ) {
           $(this).html(n);
         } else if ( html.substring(0,7) == 'mailto:' ) {
@@ -775,40 +674,40 @@
       this.saveRemote();
       this.load();
     },
-    
+
     addFriend: function(uri, name) {
       for (i=0; i<this.friends.length; i++) {
         if ( uri == this.friends[i]['@id'] && name == this.friends[i]['http://xmlns.com/foaf/0.1/name'] ) return;
       }
-      
+
       this.friends.push({ "@id" : uri, "http://xmlns.com/foaf/0.1/name" : name });
       window.localStorage.friends = JSON.stringify(this.friends);
     },
-    
+
     deleteFile: function(file) {
       var body = '';
       xhr = new XMLHttpRequest();
       xhr.open('DELETE', file, false);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      xhr.send(body);      
+      xhr.send(body);
     },
-    
+
     putFile: function(file, data) {
       xhr = new XMLHttpRequest();
       xhr.open('PUT', file, false);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      xhr.send(data);   
+      xhr.send(data);
       //alert(data);
     },
-    
+
     postFile: function(file, data) {
       xhr = new XMLHttpRequest();
       xhr.open('POST', file, false);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      xhr.send(data);   
+      xhr.send(data);
       //alert(data);
     },
-    
+
     createDirectory: function(dir) {
       var xhr = new XMLHttpRequest();
       xhr.open('MKCOL', dir, false);
@@ -832,9 +731,9 @@
       }
     },
 
-    
+
     createIOU: function(source, destination, amount, currency, comment, date) {
-       
+
        var IOU = {
                      "@id": "",
                      "http://purl.org/commerce#source": {
@@ -851,61 +750,61 @@
                           "@id": "http://purl.org/commerce#Transfer"
                        }
                     };
-                       
+
         var subject = hex_sha1(JSON.stringify(jsonld.normalize(IOU)));
-        
+
         var legacyIOU = {};
             legacyIOU[subject] = {
                     "http://purl.org/commerce#amount" : [ {
                         "value" : amount,
                         "type" : "literal"
                         }
-                      
+
                       ],
                     "http://purl.org/commerce#currency" : [ {
                         "value" : currency,
                         "type" : "literal"
                         }
-                      
+
                       ],
                     "http://purl.org/commerce#destination" : [ {
                         "value" : destination,
                         "type" : "uri"
                         }
-                      
+
                       ],
                     "http://purl.org/commerce#source" : [ {
                         "value" : source,
                         "type" : "uri"
                         }
-                      
+
                       ],
                     "http://purl.org/dc/terms/created" : [ {
                         "value" : date,
                         "type" : "literal"
                         }
-                      
+
                       ],
                     "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" : [ {
                         "value" : "http://purl.org/commerce#Transfer",
                         "type" : "uri"
                         }
-                      
+
                       ],
                     "http://www.w3.org/2000/01/rdf-schema#comment" : [ {
                         "value" : comment,
                         "type" : "literal"
                         }
-                      
+
                       ]
-                       
+
                    };
-             
-                   
-      // TODO upgrade to latest spec             
+
+
+      // TODO upgrade to latest spec
       return legacyIOU;
     },
-    
+
     makeURI: function(id) {
       if ( id.substring(0,7) == 'mailto:' ) {
         return id;
@@ -915,33 +814,33 @@
         return 'mailto:' + id;
       }
     },
-    
+
     mergeObjects: function (obj1,obj2) {
       var obj3 = {};
       for (var attrname in obj1) { obj3[attrname] = obj1[attrname]; }
       for (var attrname in obj2) { obj3[attrname] = obj2[attrname]; }
       return obj3;
     },
-    
+
     addR: function(id) {
       $('#addRecipient').dialog();
     },
-    
+
     loginPopup: function(id) {
       $('#loginPopup').dialog();
     }
-    
+
   };
-  
-  
+
+
   // Init
   $(document).ready(function() {
-    document.IOU = new IOU; 
+    document.IOU = new IOU;
     $('#clearall').click(function() { document.IOU.clear() });
     $('#save').click(function() { document.IOU.save() });
     $('#add').click(function() { document.IOU.addRecipient() });
   });
-  
+
 })(jQuery);
 
 
