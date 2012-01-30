@@ -684,10 +684,10 @@
     addR: function(id) {
       if($('#addRecipient').is(':hidden')) {
         $('#addRecipient').show();
-        $('#addRecipient-button').innerHTML = 'cancel';
+        $('#addRecipient-button').html('cancel');
       } else {
         $('#addRecipient').hide();
-        $('#addRecipient-button').innerHTML = 'add';
+        $('#addRecipient-button').html('add');
       }
     },
 
