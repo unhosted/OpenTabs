@@ -682,7 +682,13 @@
     },
 
     addR: function(id) {
-      $('#addRecipient').show();
+      if($('#addRecipient').is(':hidden')) {
+        $('#addRecipient').show();
+        $('#addRecipient-button').innerHTML = 'cancel';
+      else {
+        $('#addRecipient').hide();
+        $('#addRecipient-button').innerHTML = 'add';
+      }
     },
 
     loginPopup: function(id) {
