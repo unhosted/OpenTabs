@@ -685,7 +685,7 @@
       if($('#addRecipient').is(':hidden')) {
         $('#addRecipient').show();
         $('#addRecipient-button').innerHTML = 'cancel';
-      else {
+      } else {
         $('#addRecipient').hide();
         $('#addRecipient-button').innerHTML = 'add';
       }
