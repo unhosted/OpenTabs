@@ -128,6 +128,7 @@
       var signin = 'javascript:document.IOU.' + this.loginType + '()';
       var userName = document.getElementById('welcome');
       userName.innerHTML = 'Sign In: &nbsp;' + '<a href="'+signin+'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
+      this.IOUs = [];
       this.render();
     },
     
@@ -446,54 +447,57 @@
 
       var ledger = {};
 
-      var line = '<tr><thead>'
+      if ( this.IOUs ) {
+        var line = '<tr><thead>'
         line += '<td class="heading">Tabs</td>';
         line += '<td class="heading">Amount</td>';
         line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
         line += '</thead></tr>';
-      $('#opentabs').append( $('<table class="bordered">').append(line) );
+        $('#opentabs').append( $('<table class="bordered">').append(line) );
 
+        for(var id in this.IOUs) {
+          if(this.IOUs.hasOwnProperty(id)) {
+            var kv = this.IOUs[id];
+            if (!kv["http://purl.org/commerce#amount"]) continue;
+            if (!kv["http://purl.org/commerce#currency"]) continue;
+            if (!kv["http://purl.org/commerce#destination"]) continue;
+            if (!kv["http://purl.org/commerce#source"]) continue;
+            if (!kv["http://purl.org/dc/terms/created"]) continue;
 
-      for(var id in this.IOUs) {
-        if(this.IOUs.hasOwnProperty(id)) {
-          var kv = this.IOUs[id];
-          if (!kv["http://purl.org/commerce#amount"]) continue;
-          if (!kv["http://purl.org/commerce#currency"]) continue;
-          if (!kv["http://purl.org/commerce#destination"]) continue;
-          if (!kv["http://purl.org/commerce#source"]) continue;
-          if (!kv["http://purl.org/dc/terms/created"]) continue;
+            var amount = kv["http://purl.org/commerce#amount"][0]['value'];
+            var curr = kv["http://purl.org/commerce#currency"][0]['value'];
+            var dest = kv["http://purl.org/commerce#destination"][0]['value'];
+            var source = kv["http://purl.org/commerce#source"][0]['value'];
+            var created = kv["http://purl.org/dc/terms/created"][0]['value'];
+            var comment = kv['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
 
-          var amount = kv["http://purl.org/commerce#amount"][0]['value'];
-          var curr = kv["http://purl.org/commerce#currency"][0]['value'];
-          var dest = kv["http://purl.org/commerce#destination"][0]['value'];
-          var source = kv["http://purl.org/commerce#source"][0]['value'];
-          var created = kv["http://purl.org/dc/terms/created"][0]['value'];
-          var comment = kv['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
+            var line = '<tr>'
+            var pm = ((-1 * amount)<0)?'minus':'plus';
 
-          var line = '<tr>'
-          var pm = ((-1 * amount)<0)?'minus':'plus';
+            line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
+            line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
+            line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
+            line += '</tr>';
+            if ( $('td:contains("'+ dest +'")').length > 0 ) {
+              var prev = $('td:contains("'+ dest +'")').first().next().html();
+              var sum = 1.0*prev + (-1 * amount );
+              pm = (sum<0)?'minus':'plus';
+              var el = $('td:contains("'+ dest +'")').first();
+              el.next().html(sum).removeClass('plus minus').addClass(pm);
+              el.parent().after(line).next().addClass('blue').hide();
+            } else {
+              $('#opentabs table tr:last').after(line);
+              $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
+            }
 
-          line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
-          line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
-          line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
-          line += '</tr>';
-          if ( $('td:contains("'+ dest +'")').length > 0 ) {
-            var prev = $('td:contains("'+ dest +'")').first().next().html();
-            var sum = 1.0*prev + (-1 * amount );
-            pm = (sum<0)?'minus':'plus';
-            var el = $('td:contains("'+ dest +'")').first();
-            el.next().html(sum).removeClass('plus minus').addClass(pm);
-            el.parent().after(line).next().addClass('blue').hide();
-          } else {
-            $('#opentabs table tr:last').after(line);
-            $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
-          }
-
+          }
         }
-      }
 
-      this.beautify();
-      this.showSummary();
+        this.beautify();
+        this.showSummary();
+      } else {
+        $('#opentabs').empty().append('You currently have no open tabs');
+      }
 
       //$('#opentabs').append(that.renderRawParagraph(that.IOUs));
     },
