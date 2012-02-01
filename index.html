@@ -38,6 +38,7 @@
 </head>
 <body>
 
+<script src="https://browserid.org/include.js" type="text/javascript"></script>
 <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script>
 
@@ -87,12 +88,13 @@
               <button class="hide" id="clearall">Clear All IOUs</button>
 
               <form id="loginPopup" class="hide" action="https://data.fm/rp_auth">
-                &nbsp;WebID <a href="https://data.fm/login?next=http://opentabs.data.fm/"><img height="60" width="105" style="float: left" src="http://www.w3.org/wiki/images/0/03/Foaf%2Bssl%24foaf_keylock_small.png" /></a><br/>
-              <br/><br/><a href="javascript:document.IOU.FBLogin()"><img src="http://www.ikerjimenez.com/imagenes/logo-facebook.gif" /></a><br/>
-              <a href="https://data.fm/login?provider=Gmail&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/gmail.png" /></a><br/>
-              <a href="https://data.fm/login?provider=Yahoo&next=http://opentabs.data.fm/"><img src="https://s3.amazonaws.com/foaf/yahoo.png" /></a><br/>
+                &nbsp;BrowserID <a id="loginBrowserID" href="#"><img width="158" height="44" style="float: left" src="http://melvincarvalho.github.com/appbuilder/images/browserid_blue.png" /></a><br/>
+                <br/><br/><a id="loginFacebook" href="#"><img src="http://melvincarvalho.github.com/appbuilder/images/facebook.gif" /></a><br/>
+                <a id="loginGmail" href="#"><img src="http://melvincarvalho.github.com/appbuilder/images/gmail.png" /></a><br/>
+                <a id="loginYahoo" href="#"><img src="http://melvincarvalho.github.com/appbuilder/images/yahoo.png" /></a><br/>
+                &nbsp;WebID <a id="loginWebID" href="#"><img height="60" width="105" style="float: left" src="http://melvincarvalho.github.com/appbuilder/images/webid.png" /></a>
               </form>
-
+        
         </div>
     </div>
 

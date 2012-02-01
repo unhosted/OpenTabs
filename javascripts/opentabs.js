@@ -3,22 +3,45 @@
   var IOU = function() { this.load() };
   IOU.prototype = {
 
+    appURI: 'https://github.com/melvincarvalho/appbuilder', // DOAP
+    userProfileURI : 'https://data.fm/user.js',
+    loginType : 'loginMulti', 
+    //loginType : 'loginBrowserID', 
+    statuses: [],
     user: null,
+
+    // Facebook ID -- change or add more
+    facebookAppID : '119467988130777',
+    facebookAppURL : 'data.fm',
+
     IOUs: {},
     friends: [],
-    statuses: [],
-    userProfileURI: 'https://data.fm/user.js',
     walletURI: null,
     friendsURI: null,
 
-    // Starting point
+
+    // INIT
     load: function() {
       this.status('Loading user...', true);
       this.getuserProfile();
       this.render();
+      this.initLogin();
     },
 
-    // Load user details, callback to displayUser
+
+    // AUTHENTICATION
+    initLogin: function() {
+      $('#loginBrowserID').click(function () {document.IOU.loginBrowserID();});
+      $('#loginGmail').attr('href', 'https://data.fm/login?provider=Gmail&next=' + document.URL );
+      $('#loginYahoo').attr('href', 'https://data.fm/login?provider=Yahoo&next=' + document.URL );
+      $('#loginWebID').attr('href', 'https://data.fm/login?next=' + document.URL );
+      if (document.URL.indexOf(this.facebookAppURL) != -1) {
+        $('#loginFacebook').click(function () {document.IOU.loginFacebook();});
+      } else {
+        $('#loginFacebook').hide();
+      }
+    },
+    
     getuserProfile: function() {
       this.userProfileURI = this.getUserProfileURI('document.IOU.displayUser');
 
@@ -44,21 +67,72 @@
       if ( user.name ) {
         var greetingText = document.createTextNode('Greetings, ' + user.name + '.');
         this.user = 'https://graph.facebook.com/' + user.id;
-        userName.innerHTML = 'Greetings, ' + user.name;
+        userName.innerHTML = 'Greetings, ' + user.name + '<a href="javascript:document.IOU.logout()"><img height="24" width="24" src="http://melvincarvalho.github.com/appbuilder/images/logout.png"/'+'></a>';
         this.loadFBFriends();
       } else {
         this.user = user;
         var userName = document.getElementById('welcome');
+        var signin = 'javascript:document.IOU.' + this.loginType + '()';
         if (user.substring(0,4) == 'dns:' ) {
-          userName.innerHTML = 'IP: ' + this.user + '&nbsp;' + '<a href="javascript:document.IOU.loginPopup()"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
+          userName.innerHTML = 'IP: ' + this.user + '&nbsp;' + '<a href="'+ signin +'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
         } else {
-          userName.innerHTML = 'User: ' + this.user;
+          userName.innerHTML = 'User: ' + this.user + '<a href="javascript:document.IOU.logout()"><img height="24" width="24" src="http://melvincarvalho.github.com/appbuilder/images/logout.png"/'+'></a>';
         }
       }
       this.loadRemote();
     },
 
-    // callback to displayFriends
+    // Called from BrowserID button
+    loginBrowserID: function() {
+      navigator.id.get(function(assertion) {
+        if (assertion) {
+    
+          var arr = assertion.split('.');
+          var f = JSON.parse(window.atob(arr[1]));
+          var user = f['principal']['email'];
+          document.getElementById('welcome').innerHTML = user + '<a href="javascript:document.IOU.logout()"><img height="24" width="24" src="http://melvincarvalho.github.com/appbuilder/images/logout.png"/'+'></a>';
+          document.IOU.user = 'mailto:' +  user;
+          $('#loginPopup').dialog('close');
+          document.IOU.loadRemote();
+
+          
+          // This code will be invoked once the user has successfully
+          // selected an email address they control to sign in with.
+        } else {
+          // something went wrong!  the user isn't logged in.
+        }
+      });      
+    },    
+    
+    // called from fb button
+    FBLogin: function() {
+      var appID = "119467988130777";
+      if (window.location.hash.length == 0) {
+        var path = 'https://www.facebook.com/dialog/oauth?';
+        var queryParams = ['client_id=' + appID,
+          'redirect_uri=' + window.location,
+          'response_type=token'];
+        var query = queryParams.join('&');
+        var url = path + query;
+        window.location = url;
+      } else {
+      }
+    },
+    
+    loginMulti: function(id) {
+      $('#loginPopup').dialog();
+    },
+    
+    logout: function() {
+      this.user = null;
+      var signin = 'javascript:document.IOU.' + this.loginType + '()';
+      var userName = document.getElementById('welcome');
+      userName.innerHTML = 'Sign In: &nbsp;' + '<a href="'+signin+'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
+      this.render();
+    },
+    
+    
+    // FRIENDS    
     loadFBFriends: function() {
       this.status('Loading friends...', true);
       var accessToken = window.location.hash.substring(1);
@@ -97,55 +171,8 @@
       this.render();
     },
 
-    // called from fb button
-    FBLogin: function() {
-      var appID = "119467988130777";
-      if (window.location.hash.length == 0) {
-        var path = 'https://www.facebook.com/dialog/oauth?';
-        var queryParams = ['client_id=' + appID,
-          'redirect_uri=' + window.location,
-          'response_type=token'];
-        var query = queryParams.join('&');
-        var url = path + query;
-        window.location = url;
-      } else {
-      }
-    },
 
-    loadRemote: function() {
-      this.loadRemoteIOUs();
-      this.loadRemoteFriends();
-    },
-
-    loadRemoteFriends: function() {
-      this.status('Loading friends...', true);
-
-      // get user
-      var user = this.user;
-      if (!user) return;
-      var userSha1 = hex_sha1(user);
-
-      that = this;
-
-      $.getJSON(this.   getFriendsURI(user) , function(data){
-        for(var prop in data) {
-          if(data.hasOwnProperty(prop)) {
-            var name = data[prop]['http://xmlns.com/foaf/0.1/name'][0]['value'];
-            var uri  = prop;
-            document.IOU.addFriend(uri, name);
-          }
-        }
-
-        that.render();
-        that.status('Loading friends...', false);
-      }).error(function(data){
-        that.addFriend('testdummy@opentabs.net', 'Test Dummy');
-        that.render();
-        that.status('Loading friends...', false);
-      });
-
-    },
-
+    // DISCOVERY
     getFriendsURI: function(user) {
       // data fm friends
       var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
@@ -186,6 +213,44 @@
       return baseDir + 'private/transfers';
     },
 
+
+    // LOAD DATA
+    loadRemote: function() {
+      this.loadRemoteIOUs();
+      this.loadRemoteFriends();
+    },
+
+    loadRemoteFriends: function() {
+      this.status('Loading friends...', true);
+
+      // get user
+      var user = this.user;
+      if (!user) return;
+      var userSha1 = hex_sha1(user);
+
+      that = this;
+
+      $.getJSON(this.   getFriendsURI(user) , function(data){
+        for(var prop in data) {
+          if(data.hasOwnProperty(prop)) {
+            var name = data[prop]['http://xmlns.com/foaf/0.1/name'][0]['value'];
+            var uri  = prop;
+            document.IOU.addFriend(uri, name);
+          }
+        }
+
+        that.render();
+        that.status('Loading friends...', false);
+      }).error(function(data){
+        that.addFriend('testdummy@opentabs.net', 'Test Dummy');
+        that.render();
+        that.status('Loading friends...', false);
+      });
+
+    },
+
+
+    // SAVE DATA
     save: function() {
       if( !this.confirm() ) {
         alert('Operation Cancelled');
@@ -324,8 +389,7 @@
     },
 
 
-
-    // render
+    // RENDER
     render: function() {
       that = this;
       this.populateFriendsDropdown();
@@ -459,8 +523,6 @@
       return ret;
     },
 
-
-
     showSummary: function() {
       $('#advanced').removeClass('active');
       $('#simple').addClass('active');
@@ -488,7 +550,7 @@
       }
     },
 
-    // Helpers
+    // HELPERS
     confirm: function() {
       var IOU = 'You are about to send:\n\n'+ $('#payee').val()
       IOU += '\n\nan IOU for ' + $('#quantity').val() + ' ' + $("#currency").val();
@@ -689,10 +751,6 @@
         $('#addRecipient').hide();
         $('#addRecipient-button').html('add');
       }
-    },
-
-    loginPopup: function(id) {
-      $('#loginPopup').dialog();
     }
 
   };
