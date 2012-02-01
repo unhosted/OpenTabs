@@ -305,9 +305,9 @@
 
       // dirs
       var baseDir = 'http://opentabs.data.fm/d/' + userSha1.substring(0,2) + '/' + userSha1.substring(2) + '/';
-      this.createDirectory(baseDir + 'public/');
-      this.createDirectory(baseDir + 'private/');
-      this.createDirectory(baseDir + 'friends/');
+      //this.createDirectory(baseDir + 'public/');
+      //this.createDirectory(baseDir + 'private/');
+      //this.createDirectory(baseDir + 'friends/');
 
 
       // DELETE
@@ -330,9 +330,9 @@
 
       // dirs
       var baseDir = 'http://opentabs.data.fm/d/' + userSha1.substring(0,2) + '/' + userSha1.substring(2) + '/';
-      this.createDirectory(baseDir + 'public/');
-      this.createDirectory(baseDir + 'private/');
-      this.createDirectory(baseDir + 'friends/');
+      //this.createDirectory(baseDir + 'public/');
+      //this.createDirectory(baseDir + 'private/');
+      //this.createDirectory(baseDir + 'friends/');
 
 
 
@@ -610,7 +610,7 @@
       xhr = new XMLHttpRequest();
       xhr.open('DELETE', file, false);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      xhr.send(body);
+      //xhr.send(body);
     },
 
     putFile: function(file, data) {
@@ -632,7 +632,7 @@
     createDirectory: function(dir) {
       var xhr = new XMLHttpRequest();
       xhr.open('MKCOL', dir, false);
-      xhr.send();
+      //xhr.send();
     },
 
     status: function(message, add) {
