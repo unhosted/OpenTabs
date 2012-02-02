@@ -15,7 +15,7 @@
     facebookAppURL : 'data.fm',
 
     IOUs: {},
-    friends: [],
+    friends: {},
     walletURI: null,
     friendsURI: null,
     
@@ -312,8 +312,8 @@
       this.deleteFile(this.getFriendsURI(user));
 
       // PUT
-      var body = jsonld.turtle(this.friends);
-      this.postFile(this.getFriendsURI(user));
+      //var body = jsonld.turtle(this.friends);
+      this.postFile(this.getFriendsURI(user), JSON.stringify(this.friends));
       this.status('Saving friends...', false);
     },
 
@@ -395,7 +395,6 @@
     // RENDER
     render: function() {
       that = this;
-      this.populateFriendsDropdown();
 
 
       $('#opentabs').empty();
@@ -495,8 +494,8 @@
           }
         }
 
+        this.populateFriendsDropdown();
         this.beautify();
-        this.showSummary();
       } else {
         $('#opentabs').empty().append('You currently have no open tabs');
       }
@@ -529,18 +528,36 @@
       return ret;
     },
 
-    showSummary: function() {
-      $('#advanced').removeClass('active');
-      $('#simple').addClass('active');
-      $('#simple').click();
-      $('#advanced').hide();
-      $('#simple').show();
+    beautify: function() {
+      // beautify cells
+      if ( !this.friends ) this.friends = {};
+      that = this;
+      $('td').each(function() {
+        var html = $(this).html();
+        var n = that.friends[html];
+
+        if ( n && n['http://xmlns.com/foaf/0.1/name'] ) {
+          $(this).html(n['http://xmlns.com/foaf/0.1/name'][0]['value']);
+        } else if ( html.substring(0,7) == 'mailto:' ) {
+          $(this).html(html.substring(7));
+        }
+      });
+
+      //$('#welcome').html(window.user);
     },
 
     populateFriendsDropdown: function() {
       // sort friends
       if (!this.friends) return;
-      this.friends = this.friends.sort(function(a,b) {
+      
+      var friends = [];
+      for(var id in this.friends) {
+        if(this.friends.hasOwnProperty(id)) {
+          friends.push({"@id": id, 'http://xmlns.com/foaf/0.1/name' : this.friends[id]['http://xmlns.com/foaf/0.1/name'][0]['value'] });
+        }
+      }
+      
+      friends = friends.sort(function(a,b) {
         if (a['http://xmlns.com/foaf/0.1/name'] > b['http://xmlns.com/foaf/0.1/name']) {
           return 1;
         } else {
@@ -549,14 +566,19 @@
       });
       $('#payee').children().remove().end();
 
-      for (i=0; i<this.friends.length; i++) {
-        var uri  = this.friends[i]['@id'];
-        var name = this.friends[i]['http://xmlns.com/foaf/0.1/name'];
+      for (i=0; i<friends.length; i++) {
+        var uri  = friends[i]['@id'];
+        var name = friends[i]['http://xmlns.com/foaf/0.1/name'];
         $("#payee").append("<option value="+ uri +">"+ name +"</option>");
       }
     },
 
     // HELPERS
+    addFriend: function(uri, name) {
+      if (this.friends[uri]) return;
+      this.friends[uri] = { 'http://xmlns.com/foaf/0.1/name' : [{ 'value' : name, 'type' : 'literal' }] }
+    },
+
     confirm: function() {
       var IOU = 'You are about to send:\n\n'+ $('#payee').val()
       IOU += '\n\nan IOU for ' + $('#quantity').val() + ' ' + $("#currency").val();
@@ -568,47 +590,10 @@
       $('.blue').toggle('slide');
     },
 
-    beautify: function() {
-      // beautify cells
-      //alert('changing cells');
-      if ( !this.friends ) this.friends = [];
-      that = this;
-      $('td').each(function() {
-        var html = $(this).html();
-        var n;
-        //alert(JSON.stringify(that.friends));
-        for (i=0; i<that.friends.length; i++) {
-          if ( that.friends[i]['@id'] == html) {
-            n = that.friends[i]['http://xmlns.com/foaf/0.1/name'];
-            //alert(n);
-          }
-        }
-
-        if ( n ) {
-          $(this).html(n);
-        } else if ( html.substring(0,7) == 'mailto:' ) {
-          $(this).html(html.substring(7));
-        } else if ( $(this).text() == 'EUR' ) {
-          $(this).children().text('€');
-        }
-      });
-
-      //$('#welcome').html(window.user);
-    },
-
     clear: function() {
       this.IOUs = window.localStorage.IOUs = null;
       this.saveRemote();
       this.load();
-    },
-
-    addFriend: function(uri, name) {
-      for (i=0; i<this.friends.length; i++) {
-        if ( uri == this.friends[i]['@id'] && name == this.friends[i]['http://xmlns.com/foaf/0.1/name'] ) return;
-      }
-
-      this.friends.push({ "@id" : uri, "http://xmlns.com/foaf/0.1/name" : name });
-      window.localStorage.friends = JSON.stringify(this.friends);
     },
 
     deleteFile: function(file) {
