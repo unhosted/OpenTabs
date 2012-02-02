@@ -33,7 +33,7 @@
     // AUTHENTICATION
     initLogin: function() {
       var url = document.URL.split("#")[0]
-      $('#loginBrowserID').click(function () {document.IOU.loginBrowserID();});
+      $('#loginBrowserID').click(function () {document.IOU.loginBrowserID();return false;});
       $('#loginGmail').attr('href', 'https://data.fm/login?provider=Gmail&next=' + url );
       $('#loginYahoo').attr('href', 'https://data.fm/login?provider=Yahoo&next=' + url );
       $('#loginWebID').attr('href', 'https://data.fm/login?next=' + url );
@@ -96,10 +96,7 @@
           document.IOU.user = 'mailto:' +  user;
           $('#loginPopup').dialog('close');
           document.IOU.loadRemote();
-
           
-          // This code will be invoked once the user has successfully
-          // selected an email address they control to sign in with.
         } else {
           // something went wrong!  the user isn't logged in.
         }
