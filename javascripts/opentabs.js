@@ -127,6 +127,7 @@
       var userName = document.getElementById('welcome');
       userName.innerHTML = 'Sign In: &nbsp;' + '<a href="'+signin+'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
       this.IOUs = {};
+      this.friends = {};
       this.render();
     },
     
