@@ -118,7 +118,7 @@
     },
     
     loginMulti: function(id) {
-      $('#loginPopup').dialog();
+      $('#loginPopup').dialog({"title" : 'Sign In'});
     },
     
     logout: function() {
