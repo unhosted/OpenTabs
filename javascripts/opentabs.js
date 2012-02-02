@@ -126,7 +126,7 @@
       var signin = 'javascript:document.IOU.' + this.loginType + '()';
       var userName = document.getElementById('welcome');
       userName.innerHTML = 'Sign In: &nbsp;' + '<a href="'+signin+'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
-      this.IOUs = [];
+      this.IOUs = {};
       this.render();
     },
     
@@ -263,7 +263,6 @@
 
     saveLocal: function() {
       this.status('Saving IOUs...', true);
-      if (!this.IOUs) this.IOUs = [];
       var newIOU = this.createIOU(this.user, this.makeURI($('#payee').val()), $('#quantity').val(), $('#currency').val(), 'test', new Date() );
       this.IOUs = this.mergeObjects( this.IOUs, newIOU);
       window.localStorage.setItem('IOUs', JSON.stringify(this.IOUs));
@@ -355,7 +354,7 @@
 
           var IOUs = data;
 
-          IOUs = that.mergeObjects(IOUs, that.createIOU($('#payee').val(), that.user, -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date()));
+          IOUs = that.mergeObjects(IOUs, that.createIOU($('#payee').val(), that.user, "" + -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date()));
 
           // DELETE
           that.deleteFile(baseDir + 'private/transfers');
@@ -370,15 +369,20 @@
           that.status('Saving IOUs...', false);
 
         }).error(function () {
-          var IOUs = [];
-          IOUs.push(that.createIOU($('#payee').val(), that.user, -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date() ));
+          var IOUs = {};
+          IOUs = that.mergeObjects(IOUs, that.createIOU($('#payee').val(), that.user, "" + -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date()));
+
+          // DELETE
+          that.deleteFile(baseDir + 'private/transfers');
 
           // PUT
-          var body = jsonld.turtle(IOUs);
-          that.putFile(baseDir + 'private/transfers', body);
+          //var body = jsonld.turtle(IOUs);
+          var body = JSON.stringify(IOUs);
+          that.postFile(baseDir + 'private/transfers', body);
 
-          that.status('Saving IOUs...', false);
+
           that.render();
+          that.status('Saving IOUs...', false);
 
         });
       } catch (err) {
@@ -674,7 +678,7 @@
                        }
                     };
 
-        var subject = hex_sha1(JSON.stringify(jsonld.normalize(IOU)));
+        var subject = '#' + hex_sha1(JSON.stringify(jsonld.normalize(IOU)));
 
         var legacyIOU = {};
             legacyIOU[subject] = {
