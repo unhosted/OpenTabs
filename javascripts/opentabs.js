@@ -105,7 +105,7 @@
     },    
     
     // called from fb button
-    FBLogin: function() {
+    loginFacebook: function() {
       var appID = "119467988130777";
       if (window.location.hash.length == 0) {
         var path = 'https://www.facebook.com/dialog/oauth?';
