@@ -163,7 +163,7 @@
       var name = $('#name').val();
 
       this.addFriend( uri , name );
-      this.saveRemote();
+      this.saveRemoteFriends();
       $('#addRecipient').hide();
 
       alert( name + ' added!' );
