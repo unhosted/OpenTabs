@@ -447,7 +447,7 @@
 
       var ledger = {};
 
-      if ( this.IOUs ) {
+      if ( this.IOUs && !$.isEmptyObject(this.IOUs) ) {
         var line = '<tr><thead>'
         line += '<td class="heading">Tabs</td>';
         line += '<td class="heading">Amount</td>';
@@ -614,7 +614,7 @@
       xhr = new XMLHttpRequest();
       xhr.open('DELETE', file, false);
       xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-      //xhr.send(body);
+      xhr.send(body);
     },
 
     putFile: function(file, data) {
