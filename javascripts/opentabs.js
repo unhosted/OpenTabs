@@ -18,6 +18,7 @@
     friends: [],
     walletURI: null,
     friendsURI: null,
+    
 
 
     // INIT
@@ -31,11 +32,12 @@
 
     // AUTHENTICATION
     initLogin: function() {
+      var url = document.URL.split("#")[0]
       $('#loginBrowserID').click(function () {document.IOU.loginBrowserID();});
-      $('#loginGmail').attr('href', 'https://data.fm/login?provider=Gmail&next=' + document.URL );
-      $('#loginYahoo').attr('href', 'https://data.fm/login?provider=Yahoo&next=' + document.URL );
-      $('#loginWebID').attr('href', 'https://data.fm/login?next=' + document.URL );
-      if (document.URL.indexOf(this.facebookAppURL) != -1) {
+      $('#loginGmail').attr('href', 'https://data.fm/login?provider=Gmail&next=' + url );
+      $('#loginYahoo').attr('href', 'https://data.fm/login?provider=Yahoo&next=' + url );
+      $('#loginWebID').attr('href', 'https://data.fm/login?next=' + url );
+      if (url.indexOf(this.facebookAppURL) != -1) {
         $('#loginFacebook').click(function () {document.IOU.loginFacebook();});
       } else {
         $('#loginFacebook').hide();
@@ -107,16 +109,15 @@
     // called from fb button
     loginFacebook: function() {
       var appID = "119467988130777";
-      if (window.location.hash.length == 0) {
-        var path = 'https://www.facebook.com/dialog/oauth?';
-        var queryParams = ['client_id=' + appID,
-          'redirect_uri=' + window.location,
-          'response_type=token'];
-        var query = queryParams.join('&');
-        var url = path + query;
-        window.location = url;
-      } else {
-      }
+      var path = 'https://www.facebook.com/dialog/oauth?';
+      var url = document.URL.split("#")[0]
+      
+      var queryParams = ['client_id=' + appID,
+        'redirect_uri=' + url,
+        'response_type=token'];
+      var query = queryParams.join('&');
+      var url = path + query;
+      window.location = url;
     },
     
     loginMulti: function(id) {
