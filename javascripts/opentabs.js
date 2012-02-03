@@ -16,6 +16,7 @@
 
     IOUs: {},
     friends: {},
+    currencies: {},
     walletURI: null,
     friendsURI: null,
     
@@ -24,6 +25,7 @@
     // INIT
     load: function() {
       this.status('Loading user...', true);
+      this.reset();
       this.getuserProfile();
       this.render();
       this.initLogin();
@@ -122,14 +124,10 @@
     },
     
     logout: function() {
-      this.user = null;
+      this.reset();
       var signin = 'javascript:document.IOU.' + this.loginType + '()';
       var userName = document.getElementById('welcome');
       userName.innerHTML = 'Sign In: &nbsp;' + '<a href="'+signin+'"><img src="https://browserid.org/i/sign_in_blue.png"/'+'></a>' ;
-      this.IOUs = {};
-      this.friends = {};
-      this.populateFriendsDropdown();
-      this.render();
     },
     
     
@@ -397,58 +395,11 @@
     // RENDER
     render: function() {
       that = this;
+      var ledger = {};
 
 
       $('#opentabs').empty();
 
-      /*
-      if(!this.IOUs || !this.IOUs.length) {
-        $('#opentabs').append( $('<p>').text('Currently no open tabs found.') );
-        return;
-      }
-
-      var line = '<tr><thead>'
-        line += '<td class="heading">Tabs</td>';
-        line += '<td class="heading">Amount</td>';
-        line += '<td><a href="javascript:document.IOU.toggle()"><img src="http://careers.advamed.org/images/new/icon_collapse_all.gif"/'+'></a></td>';
-        line += '</thead></tr>';
-      $('#opentabs').append( $('<table class="bordered">').append(line) );
-
-      this.IOUs.forEach(function(item) {
-        if (item) {
-          var source = item['http://purl.org/commerce#source']['@id'];
-          var dest = item['http://purl.org/commerce#destination']['@id'];
-          var amount = item['http://purl.org/commerce#amount'];
-          var curr = item['http://purl.org/commerce#currency'];
-          var created = item['http://purl.org/dc/terms/created'];
-          var comment = item['http://www.w3.org/2000/01/rdf-schema#comment'];
-          var line = '<tr>'
-          var pm = ((-1 * amount)<0)?'minus':'plus';
-
-          line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
-          line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
-          line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
-          line += '</tr>';
-          if ( $('td:contains("'+ dest +'")').length > 0 ) {
-            var prev = $('td:contains("'+ dest +'")').first().next().html();
-            var sum = 1.0*prev + (-1 * amount );
-            pm = (sum<0)?'minus':'plus';
-            var el = $('td:contains("'+ dest +'")').first();
-            el.next().html(sum).removeClass('plus minus').addClass(pm);
-            el.parent().after(line).next().addClass('blue').hide();
-          } else {
-            $('#opentabs table tr:last').after(line);
-            $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
-          }
-        }
-      });
-
-
-      this.beautify();
-      this.showSummary();
-      */
-
-      var ledger = {};
 
       if ( this.IOUs && !$.isEmptyObject(this.IOUs) ) {
         var line = '<tr><thead>'
@@ -461,46 +412,77 @@
         for(var id in this.IOUs) {
           if(this.IOUs.hasOwnProperty(id)) {
             var kv = this.IOUs[id];
-            if (!kv["http://purl.org/commerce#amount"]) continue;
-            if (!kv["http://purl.org/commerce#currency"]) continue;
+            
+            // validate
+            if (!kv["http://purl.org/commerce#amount"])      continue;
+            if (!kv["http://purl.org/commerce#currency"])    continue;
             if (!kv["http://purl.org/commerce#destination"]) continue;
-            if (!kv["http://purl.org/commerce#source"]) continue;
-            if (!kv["http://purl.org/dc/terms/created"]) continue;
+            if (!kv["http://purl.org/commerce#source"])      continue;
+            if (!kv["http://purl.org/dc/terms/created"])     continue;
 
-            var amount = kv["http://purl.org/commerce#amount"][0]['value'];
-            var curr = kv["http://purl.org/commerce#currency"][0]['value'];
-            var dest = kv["http://purl.org/commerce#destination"][0]['value'];
-            var source = kv["http://purl.org/commerce#source"][0]['value'];
-            var created = kv["http://purl.org/dc/terms/created"][0]['value'];
-            var comment = kv['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
-
-            var line = '<tr>'
-            var pm = ((-1 * amount)<0)?'minus':'plus';
-
-            line += '<td nowrap="nowrap" title="'+ dest +'">' + dest + '</td>';
-            line += '<td title="'+ comment +'" class="gold '+ pm +'">' + (-1 * amount) + '</td>';
-            line += '<td title="'+ created +'"><a href="javascript:document.IOU.toggle()">' + curr + '</a></td>';
-            line += '</tr>';
-            if ( $('td:contains("'+ dest +'")').length > 0 ) {
-              var prev = $('td:contains("'+ dest +'")').first().next().html();
-              var sum = 1.0*prev + (-1 * amount );
-              pm = (sum<0)?'minus':'plus';
-              var el = $('td:contains("'+ dest +'")').first();
-              el.next().html(sum).removeClass('plus minus').addClass(pm);
-              el.parent().after(line).next().addClass('blue').hide();
-            } else {
-              $('#opentabs table tr:last').after(line);
-              $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
-            }
-
+            // get data
+            var amount   = kv["http://purl.org/commerce#amount"][0]['value'];
+            var currency = kv["http://purl.org/commerce#currency"][0]['value'];
+            var dest     = kv["http://purl.org/commerce#destination"][0]['value'];
+            var source   = kv["http://purl.org/commerce#source"][0]['value'];
+            var created  = kv["http://purl.org/dc/terms/created"][0]['value'];
+            var comment  = kv['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
+            
+            
+            if (!ledger[dest]) ledger[dest] = {};
+            if (!ledger[dest][currency]) ledger[dest][currency] = [];
+            ledger[dest][currency].push( { "amount" : amount, "currency" : currency, "dest" : dest, "source" : source, "created" : created, "comment" : comment } );
+            
           }
         }
+        
+        // display
+        for(var id in ledger) {
+          if(ledger.hasOwnProperty(id)) {
+            var k = ledger[id];
+           
+            for(var v in k) {
+              if(k.hasOwnProperty(v)) {
+                var rows = k[v];
+                var sum =0;
+                for (i=0; i<rows.length; i++) {
+                  var row = rows[i];
+                  // create row
+                  var line = '<tr class="item">'
+                  var pm = ((-1 * row['amount'])<0)?'minus':'plus';
+                  var arr = row['currency'].split('/');
+                  line += '<td class="counterparty" nowrap="nowrap" title="'+ row['dest'] +'">' + row['dest'] + '</td>';
+                  line += '<td title="'+ row['comment'] +'" class="gold '+ pm +'">' + (-1 * row['amount']) + '</td>';
+                  line += '<td class="currenncy" title="'+ row['created'] +'"><a href="javascript:document.IOU.toggle()">' + arr[arr.length-1] + '</a></td>';
+                  line += '</tr>';
+                  
+                  sum += parseFloat(row['amount']);
+
+                  // display summary
+                  if (i==0) { 
+                    $('#opentabs table tr:last').after(line);
+                    var el = $('#opentabs table tr:last');
+                  } else {
+                    el.children()[1].innerHTML = sum;
+                  }
+                  $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
+
+                }
+              }
+            }    
+          }
+        }
+        
 
         this.populateFriendsDropdown();
+        this.populateCurrenciesDropdown();
         this.beautify();
       } else {
         $('#opentabs').empty().append('You currently have no open tabs');
       }
+
+
+
 
       //$('#opentabs').append(that.renderRawParagraph(that.IOUs));
     },
@@ -575,10 +557,56 @@
       }
     },
 
+    populateCurrenciesDropdown: function() {
+      // sort friends
+      if (!this.currencies) return;
+      
+      var currencies = [];
+      for(var id in this.currencies) {
+        if(this.currencies.hasOwnProperty(id)) {
+          currencies.push({"@id": id, 'http://dbpedia.org/property/currencyName' : this.currencies[id]['http://dbpedia.org/property/currencyName'][0]['value'] });
+        }
+      }
+      
+      currencies = currencies.sort(function(a,b) {
+        if (a['http://dbpedia.org/property/currencyName'] > b['http://dbpedia.org/property/currencyName']) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+      $('#currency').children().remove().end();
+
+      for (i=0; i<currencies.length; i++) {
+        var uri  = currencies[i]['@id'];
+        var name = currencies[i]['http://dbpedia.org/property/currencyName'];
+        $("#currency").append("<option value="+ uri +">"+ name +"</option>");
+      }
+    },
+
     // HELPERS
+    reset: function() {
+      this.user = null;
+      this.IOUs = {};
+      this.friends = {};
+      this.currencies = {};
+      this.addFriend('testdummy@opentabs.net', 'Test Dummy');
+      this.addCurrency('http://dbpedia.org/resource/Euro', '&euro;');
+      this.addCurrency('http://dbpedia.org/resource/Bitcoin', 'bitcoin');
+      this.populateFriendsDropdown();
+      this.render();
+    },
+    
     addFriend: function(uri, name) {
       if (this.friends[uri]) return;
       this.friends[uri] = { 'http://xmlns.com/foaf/0.1/name' : [{ 'value' : name, 'type' : 'literal' }] }
+    },
+
+    addCurrency: function(uri, name, display, depiction) {
+      if (this.currencies[uri]) return;
+      this.currencies[uri] = { 
+                               'http://dbpedia.org/property/currencyName' : [{ 'value' : name, 'type' : 'literal' }]
+                             }
     },
 
     confirm: function() {
@@ -589,7 +617,7 @@
     },
 
     toggle: function() {
-      $('.blue').toggle('slide');
+      $('.blue').toggle('slow');
     },
 
     clear: function() {
