@@ -456,14 +456,16 @@
                   line += '<td class="currenncy" title="'+ row['created'] +'"><a href="javascript:document.IOU.toggle()">' + arr[arr.length-1] + '</a></td>';
                   line += '</tr>';
                   
-                  sum += parseFloat(row['amount']);
+                  sum -= parseFloat(row['amount']);
 
                   // display summary
                   if (i==0) { 
                     $('#opentabs table tr:last').after(line);
                     var el = $('#opentabs table tr:last');
                   } else {
-                    el.children()[1].innerHTML = sum;
+                    pm = (sum<0)?'minus':'plus';
+                    el.children().eq(1).html(sum);
+                    el.children().eq(1).removeClass('plus minus').addClass(pm);
                   }
                   $('#opentabs table tr:last').after(line).next().addClass('blue').hide();
 
