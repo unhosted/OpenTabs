@@ -277,9 +277,9 @@
 
       // dirs
       var baseDir = 'http://opentabs.data.fm/d/' + userSha1.substring(0,2) + '/' + userSha1.substring(2) + '/';
-      this.createDirectory(baseDir + 'public/');
-      this.createDirectory(baseDir + 'private/');
-      this.createDirectory(baseDir + 'friends/');
+      //this.createDirectory(baseDir + 'public/');
+      //this.createDirectory(baseDir + 'private/');
+      //this.createDirectory(baseDir + 'friends/');
 
 
       // DELETE
