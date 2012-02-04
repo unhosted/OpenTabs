@@ -174,7 +174,7 @@
       
       // Discover from localStorage
       var lsKey = 'walletURI';
-      if ( localStorage[lsKey] ) ret.push(localStorage[lsKey]);
+      if ( user == this.user && window.localStorage[lsKey] ) ret.push(window.localStorage[lsKey]);
       
       // Search default location on data.fm
       var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
@@ -284,7 +284,7 @@
 
       // DELETE
       var walletURIs = this.getWalletURIs(this.user);
-      var walletURI = walletURIs[walletURIs.length-1];
+      var walletURI = walletURIs[0];
       this.deleteFile(walletURI);
 
       // PUT
@@ -334,8 +334,8 @@
 
 
       try {
-        var walletURIs = this.getWalletURIs(this.user);
-        var walletURI = walletURIs[walletURIs.length-1];
+        var walletURIs = this.getWalletURIs(user);
+        var walletURI = walletURIs[0];
         $.getJSON(walletURI , function(data){
           var IOUs = data;
 
