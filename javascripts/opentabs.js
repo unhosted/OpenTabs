@@ -17,7 +17,7 @@
     IOUs: {},
     friends: {},
     currencies: {},
-    walletURI: null,
+    walletURIs: [],
     friendsURI: null,
     
 
@@ -52,16 +52,6 @@
       var script = document.createElement('script');
       script.src = this.userProfileURI;
       document.body.appendChild(script);
-    },
-
-    getUserProfileURI: function(callback) {
-      // Non Facebook
-      if (window.location.hash.length == 0) {
-        return this.userProfileURI + '?callback=' + callback;
-      // Facebook
-      } else {
-        return "https://graph.facebook.com/me?" + window.location.hash.substring(1) + '&callback=' + callback;
-      }
     },
 
     // callback to loadFriends, calls loadRemote
@@ -173,43 +163,34 @@
 
     // DISCOVERY
     getFriendsURI: function(user) {
-      // data fm friends
+      // friends
       var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
       return baseDir + 'private/friends';
     },
 
-    loadRemoteIOUs: function() {
-      this.status('Loading IOUs...', true);
-      that = this;
-
-      $.getJSON(this.getWalletURI(this.user) , function(data){
-        /*
-        document.IOU.IOUs = [];
-        for(var prop in data) {
-          if(data.hasOwnProperty(prop)) {
-            var source = data[prop]['http://purl.org/commerce#source'][0]['value'];
-            var destination = data[prop]['http://purl.org/commerce#destination'][0]['value'];
-            var amount = data[prop]['http://purl.org/commerce#amount'][0]['value'];
-            var currency = data[prop]['http://purl.org/commerce#currency'][0]['value'];
-            var comment = data[prop]['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
-            var date = data[prop]['http://purl.org/dc/terms/created'][0]['value'];
-            document.IOU.IOUs.push(that.createIOU(source, destination, amount, currency, comment, date));
-          }
-        }
-        */
-        that.IOUs = that.mergeObjects(that.IOUs, data);
-        that.render();
-        that.status('Loading IOUs...', false);
-      }).error(function(data){
-        that.status('Loading IOUs...', false);
-      });
-
+    getWalletURIs: function(user) {
+      // wallet URIs
+      var ret = [];
+      
+      // Discover from localStorage
+      var lsKey = 'walletURI';
+      if ( localStorage[lsKey] ) ret.push(localStorage[lsKey]);
+      
+      // Search default location on data.fm
+      var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
+      ret.push(baseDir + 'private/transfers');
+      
+      return ret;
     },
 
-    getWalletURI: function(user) {
-      // data fm wallet
-      var baseDir = 'http://opentabs.data.fm/d/' + hex_sha1(user).substring(0,2) + '/' + hex_sha1(user).substring(2) + '/';
-      return baseDir + 'private/transfers';
+    getUserProfileURI: function(callback) {
+      // Non Facebook
+      if (window.location.hash.length == 0) {
+        return this.userProfileURI + '?callback=' + callback;
+      // Facebook
+      } else {
+        return "https://graph.facebook.com/me?" + window.location.hash.substring(1) + '&callback=' + callback;
+      }
     },
 
 
@@ -217,6 +198,22 @@
     loadRemote: function() {
       this.loadRemoteIOUs();
       this.loadRemoteFriends();
+    },
+
+    loadRemoteIOUs: function() {
+      this.status('Loading IOUs...', true);
+      that = this;
+      
+      var walletURIs = this.getWalletURIs(this.user);
+      for (i=0; i<walletURIs.length; i++) {
+        $.getJSON(walletURIs[i] , function(data){
+          that.IOUs = that.mergeObjects(that.IOUs, data);
+          that.render();
+          that.status('Loading IOUs...', false);
+        }).error(function(data){
+          that.status('Loading IOUs...', false);
+        });
+      }
     },
 
     loadRemoteFriends: function() {
@@ -286,12 +283,14 @@
 
 
       // DELETE
-      this.deleteFile(this.getWalletURI(user));
+      var walletURIs = this.getWalletURIs(this.user);
+      var walletURI = walletURIs[walletURIs.length-1];
+      this.deleteFile(walletURI);
 
       // PUT
       //var body = jsonld.turtle(this.IOUs);
       var body = JSON.stringify(this.IOUs);
-      this.postFile(this.getWalletURI(user), body);
+      this.postFile(walletURI, body);
       this.status('Saving IOUs...', false);
     },
 
@@ -335,23 +334,9 @@
 
 
       try {
-        $.getJSON(this.getWalletURI(user) , function(data){
-          //alert(data);
-          /*
-          var IOUs = [];
-          for(var prop in data) {
-            if(data.hasOwnProperty(prop)) {
-              var source = data[prop]['http://purl.org/commerce#source'][0]['value'];
-              var destination = data[prop]['http://purl.org/commerce#destination'][0]['value'];
-              var amount = data[prop]['http://purl.org/commerce#amount'][0]['value'];
-              var currency = data[prop]['http://purl.org/commerce#currency'][0]['value'];
-              var comment = data[prop]['http://www.w3.org/2000/01/rdf-schema#comment'][0]['value'];
-              var date = data[prop]['http://purl.org/dc/terms/created'][0]['value'];
-              IOUs.push(that.createIOU(source, destination, amount, currency, comment, date));
-            }
-          }
-          */
-
+        var walletURIs = this.getWalletURIs(this.user);
+        var walletURI = walletURIs[walletURIs.length-1];
+        $.getJSON(walletURI , function(data){
           var IOUs = data;
 
           IOUs = that.mergeObjects(IOUs, that.createIOU($('#payee').val(), that.user, "" + -1.0*$('#quantity').val(), $('#currency').val(), 'test', new Date()));
