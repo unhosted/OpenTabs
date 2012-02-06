@@ -770,7 +770,6 @@
     $('#clearall').click(function() { document.IOU.clear() });
     $('#save').click(function() { document.IOU.save() });
     $('#add').click(function() { document.IOU.addRecipient() });
-    $("label").inFieldLabels();
   });
 
 })(jQuery);
