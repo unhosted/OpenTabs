@@ -1,0 +1,21 @@
+
+<div id="testDiv"></div>
+<script src="js/_.js"></script>
+<script>
+  var templates = {
+    person: {
+      default: 'hello <%= name %> <input type="submit" value="edit greeting" '
+        +'onclick="this.parentNode.render(\'editGreeting\');">',
+      editGreeting: 'edit greeting'
+    }
+  };
+  function bind(divName, obj) {
+    document.getElementById(divName).render = (function(obj) {
+      return function(state) {
+        this.innerHTML = _.template(templates[obj.type][state], obj);
+      };
+    })(obj);
+  }
+  bind('testDiv', {type: 'person', name:'Michiel'});
+  document.getElementById('testDiv').render('default');
+</script>
